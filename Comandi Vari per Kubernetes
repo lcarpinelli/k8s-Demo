@@ -1,0 +1,21 @@
+COMANDI AZURE
+- az login
+- az account set -s *id sottoscrizione*
+- az aks get-credentials --resource-group *nome resource group* --name *nome cluster*
+
+COMANDI HELM
+- helm install nginx-ingress ingress-nginx/ingress-nginx --set controller.replicaCount=2 --set controller.nodeSelector."kubernetes\.io/os"=linux --set controller.admissionWebhooks.patch.nodeSelector."kubernetes\.io/os"=linux
+- helm install *nome da assegnare alla release* ./*path della chart rispetto alla dir* 	ES.:(helm install k8s-helm ./K8s-Helm)
+- helm upgrade *nome da assegnare alla release* ./*path della chart rispetto alla dir*
+ES.:(helm upgrade k8s-helm ./K8s-Helm)
+- helm uninstall *nome da assegnare alla release* ./*path della chart rispetto alla dir*
+ES.:(helm uninstall k8s-helm ./K8s-Helm)
+- helm create *nome da assegnare alla release*
+ES.:(helm create k8s-helm)
+
+COMANDI KUBECTL
+- kubectl config set-context --current --namespace=*nome namespace*
+- kubectl get service
+- kubectl get pods
+- kubectl get deploy 
+
