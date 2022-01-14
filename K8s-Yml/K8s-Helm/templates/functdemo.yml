@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: function
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: function
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: function
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: function
+        image: carpinelli/k8sfunction:1.3
+        env:
+        - name: Api__BaseUrlBackend
+          valueFrom:
+            configMapKeyRef:
+              name: function-config
+              key: Api__BaseUrlBackend
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: function
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: function
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: function-config
+data:
+  Api__BaseUrlBackend: "http://backend"
+   

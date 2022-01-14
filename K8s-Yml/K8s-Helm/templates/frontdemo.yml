@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: frontend
+        image: carpinelli/k8sfrontend:1.2
+        env:
+        - name: Api__BaseUrl
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-config
+              key: Api_BaseUrl
+        - name: Api__BaseUrlBackend
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-config
+              key: Api_BaseUrlBackend    
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: frontend
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+data:
+  Api_BaseUrl: "http://function"
+  Api_BaseUrlBackend: "http://backend"
