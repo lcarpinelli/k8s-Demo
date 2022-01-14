@@ -21,7 +21,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: backend
-        image: carpinelli/k8sbackend:1.0
+        image: acrdemok8s.azurecr.io/k8sbackend:1.0
         ports:
         - containerPort: 80
         resources:

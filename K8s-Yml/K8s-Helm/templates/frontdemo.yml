@@ -21,7 +21,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: frontend
-        image: carpinelli/k8sfrontend:1.2
+        image: acrdemok8s.azurecr.io/k8sfrontend:1.2
         env:
         - name: Api__BaseUrl
           valueFrom:
